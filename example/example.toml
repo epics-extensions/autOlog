@@ -1,0 +1,20 @@
+# config.toml
+# login information
+[credentials]
+  username = "admin"
+  password = "<insert password>"
+  api_url = "<insert api_url>"
+
+# new log information
+[autolog]
+  title = "Manual shutbeam"
+  description = "The beam was stopped manually by pressing the stop button on the GUI menu."
+  level = "critic"
+  logbook = "tests"
+
+# pv information
+[pv]
+  trigger_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
+  trigger_pv_value = 0
+  check_time = 3 # optionnal. Waiting time for the loop to check pv value, default value: 5s
+
