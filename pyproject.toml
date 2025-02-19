@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "autolog"
+version = "0.1.0"
+description = "Create automatically a log into Phoebus-Olog server, triggered by an EPICS PV."
+authors = ["Antoine Choquet <antoine.choquet@cea.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.32.3"
+pyepics = "^3.5.7"
+pytime = "^0.2.3"
+argparse = "^1.4.0"
+tomli = "^2.2.1"
+pybase64 = "^1.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
