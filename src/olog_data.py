@@ -18,7 +18,6 @@ def read_data(file_input, credentials):
             output["password"] = input("Enter password: ")
             output["api_url"] = input ("Enter the HTTP url of the Olog API: ")
         else:
-            #output['credendials'] = data['credentials']
             output["username"] = data['credentials']['username']
             output["password"] = data['credentials']['password']
             output["api_url"] = data['credentials']['api_url']
@@ -39,8 +38,8 @@ def read_data(file_input, credentials):
             output['check_time'] = data['pv']['check_time']
         else:
             output['check_time'] = 5
-
         return output
     except KeyError as e:
         print(f"The variable: {e} is missing into the toml file")
         exit()
+        
