@@ -13,6 +13,7 @@ pytime = "^0.2.3"
 argparse = "^1.4.0"
 tomli = "^2.2.1"
 pybase64 = "^1.4.0"
+urllib3 = "^1.26.6"
 
 [tool.poetry.group.dev.dependencies]
 pyinstaller = "^6.12.0"
