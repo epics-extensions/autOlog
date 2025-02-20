@@ -12,7 +12,6 @@ def read_data(file_input, credentials):
     output = dict()
 
     try:
-        print(data)
         # Extract credentials data
         if credentials:
             output["username"] = input("Enter username: ")
@@ -41,7 +40,6 @@ def read_data(file_input, credentials):
         else:
             output['check_time'] = 5
 
-        print(output['check_time'])
         return output
     except KeyError as e:
         print(f"The variable: {e} is missing into the toml file")
