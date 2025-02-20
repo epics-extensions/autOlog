@@ -1,4 +1,4 @@
-# config.toml
+# example.toml
 # login information
 [credentials]
   username = "admin"
@@ -16,5 +16,5 @@
 [pv]
   trigger_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
   trigger_pv_value = 0
-  check_time = 3 # optionnal. Waiting time for the loop to check pv value, default value: 5s
+  #check_time = 3 # optionnal. Waiting time for the loop to check pv value, default value: 5s
 
