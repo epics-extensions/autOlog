@@ -79,6 +79,7 @@ if __name__ == "__main__":
     api_url = log['api_url']
     username = log['username']
     password = log['password']
+    check_time = log['check_time']
 
     # Get token
     token = create_auth_object(api_url, username, password)
@@ -95,10 +96,10 @@ if __name__ == "__main__":
             # Wait for the pv value to change
             while check_pv(pv):
                 print("The pv has triggered the creation of a log once. Its value is still equal to the trigger value. Waiting...\n")
-                time.sleep(5)
+                time.sleep(check_time)
         else:
             print("Condition not met. Waiting...\n")
         
         # Wait for 5 seconds before next check
-        time.sleep(5)
+        time.sleep(check_time)
 

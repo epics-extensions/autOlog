@@ -2,7 +2,7 @@ import tomli
 
 def read_data(file_input, credentials):
     """
-    Read the configuration file given by user 
+    Read the configuration file given by user
     """
     try:
         with open(file_input, "rb") as f:

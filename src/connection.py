@@ -24,5 +24,3 @@ def create_auth_object(api_url, username, password):
         print(f"Connection failed. Code : {response.status_code}")
         print(response)
 
-
-    
