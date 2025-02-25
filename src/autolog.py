@@ -33,7 +33,7 @@ def post_request(autolog, pv, token, api_url, username):
     """
     # Create description with default information and user information
     title = "[autOlog]: " + autolog['title']
-    description = f"Log created automatically.\n\n Triggered by the pv: {pv['trigger_pv_name']}, with value: {pv['trigger_pv_value']} \n\n" + "Description:\n\n" + log['autolog']['description']
+    description = f"Log created automatically.\n\n Triggered by the pv: {pv['trigger_pv_name']}, with value: {pv['trigger_pv_value']} \n\n" + "Description:\n\n" +  autolog['description']
     body =  {
                    "owner": f"{username}",
                    "description": f"{description}",
@@ -59,7 +59,7 @@ def post_request(autolog, pv, token, api_url, username):
     response = requests.put(log_url, json=body, headers=header)
     print(f"The following log has been created: \n\n {response.json()} \n")
 
-if __name__ == "__main__":    
+def main() -> None:
     parser = argparse.ArgumentParser(description="A python tool to create automatically logs into Phoebus-Olog server, triggered by a PV value.")
     
     # Input toml file
@@ -102,4 +102,7 @@ if __name__ == "__main__":
         
         # Wait for 5 seconds before next check
         time.sleep(check_time)
-        
+
+if __name__ == "__main__":
+    main()
+
