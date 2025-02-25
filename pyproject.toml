@@ -18,6 +18,10 @@ urllib3 = "^1.26.6"
 [tool.poetry.group.dev.dependencies]
 pyinstaller = "^6.12.0"
 
+[tool.poetry.scripts]
+autolog = "autolog:main"
+build = "scripts.build:install"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

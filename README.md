@@ -1,4 +1,5 @@
 # AutOlog
+## Presentation
 
 A python tool to create automatically logs into Phoebus-Olog server, triggered by a PV value.
 
@@ -10,6 +11,44 @@ The credentials data `username`, `password` and `api_url` (as provided in the ph
 
 Check the package registry to get a binary that could be run with `procserv` as a a background programme.
 
+## Installation
+
+### Using Poetry
+
+First, install Poetry.
+Refer to the [Poetry](https://duckduckgo.com) for instructions.
+
+To build the project,
+you can run:
+
+``` bash
+poetry install
+poetry run build
+```
+It is using PyInstaller to create a binary in **dist**
+
+
+## Execution
+
+### Using Poetry
+
+To run the script from anywhere in the directory execute 
+``` bash
+poetry shell
+```
+Then you can call the script from anywhere
+``` bash
+autolog -c example/example.toml
+```
+### Using Binary
+
+If you have build the binary you can 
+``` bash
+> cd dist
+> autolog -h
+```
+
+## Usage
 Usage example:
 
 `python src/autolog.py -c example/example.toml`
