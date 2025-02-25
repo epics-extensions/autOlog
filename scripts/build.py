@@ -7,9 +7,8 @@ path_to_main = str(HERE / "../src/autolog.py")
 def install():
     PyInstaller.__main__.run([
         path_to_main,
+        "--clean",
         '--onefile',
-        '--windowed',
         '--hidden-import',
         'epics.clibs'
-        # other pyinstaller options... 
     ])
