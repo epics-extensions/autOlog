@@ -45,13 +45,11 @@ def post_request(autolog, pv, token, api_url, username):
                        }
                    ]
                }
-    
     # Header with authentication token
     header = {
         "Authorization": f"Basic {token}",
         "content-type": "application/json",
     }
-
     # API url to create new logs
     log_url = api_url + "/logs"
 
