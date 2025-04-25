@@ -29,6 +29,9 @@ def read_data(file_input, credentials):
         output["level"] = data['autolog']['level']
         output["logbook"] = data['autolog']['logbook']
 
+        if 'attachment_file' in data['autolog']:
+            output["attachment_file"] = data['autolog']['attachment_file']
+
         # Extract pv data
         output["pv"] = data['pv']
         output["trigger_pv_name"] = data['pv']['trigger_pv_name']

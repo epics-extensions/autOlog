@@ -2,6 +2,8 @@ import requests
 import epics
 import time
 import argparse
+import uuid
+import json
 from connection import create_auth_object
 from olog_data import read_data
 
@@ -43,19 +45,42 @@ def post_request(autolog, pv, token, api_url, username):
                        {
                            "name": f"{autolog['logbook']}"
                        }
-                   ]
+                   ],
+                   "attachments":[]
                }
+
     # Header with authentication token
     header = {
         "Authorization": f"Basic {token}",
-        "content-type": "application/json",
     }
     # API url to create new logs
-    log_url = api_url + "/logs"
+    log_url = api_url + "/logs/multipart"
 
-    # Send API request to create new log
-    response = requests.put(log_url, json=body, headers=header)
-    print(f"The following log has been created: \n\n {response.json()} \n")
+    if autolog.get('attachment_file') is not None:
+        file_path = autolog['attachment_file']
+        attachment_id = str(uuid.uuid4())
+        attachment_name = file_path.split('/')[-1]
+        log_entry["attachments"].append({"id": f"{attachment_id}", "filename": f"{attachment_name}"})
+        log_entry_json = json.dumps(log_entry)
+        files = {
+            'logEntry': ('logEntry.json', f"{log_entry_json}", 'application/json'),
+            'files': (f"{attachment_name}", open(file_path, 'rb'), "application/octet-stream")
+        }
+    else:
+        log_entry_json = json.dumps(log_entry)
+        files = {
+            'logEntry': ('logEntry', f"{log_entry_json}", 'application/json')
+        }
+
+    response = requests.put(log_url, files=files, headers=header)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        print('Log entry created successfully.')
+        print('Response:', response.json())
+    else:
+        print(f'Failed to create log entry. Status code: {response.status_code}')
+        print('Response:', response.text)
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="A python tool to create automatically logs into Phoebus-Olog server, triggered by a PV value.")

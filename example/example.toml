@@ -11,6 +11,7 @@
   description = "The beam was stopped manually by pressing the stop button on the GUI menu."
   level = "critic"
   logbook = "tests"
+  attachment_file = "path/to/file/file.plt"
 
 # pv information
 [pv]
