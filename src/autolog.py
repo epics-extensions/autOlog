@@ -34,9 +34,9 @@ def post_request(autolog, pv, token, api_url, username):
     Create and send API request to Olog server
     """
     # Create description with default information and user information
-    title = "[autOlog]: " + autolog['title']
-    description = f"Log created automatically.\n\n Triggered by the pv: {pv['trigger_pv_name']}, with value: {pv['trigger_pv_value']} \n\n" + "Description:\n\n" +  autolog['description']
-    body =  {
+    title = autolog['title']
+    description = autolog['description'] + f"\n\nThe log creation has been triggered by the pv: {pv['trigger_pv_name']}, with value: {pv['trigger_pv_value']}" + "\n\n Log created automatically by the application AutOlog"
+    log_entry =  {
                    "owner": f"{username}",
                    "description": f"{description}",
                    "level": f"{autolog['level']}",
