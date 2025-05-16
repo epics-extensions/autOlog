@@ -25,30 +25,36 @@ you can run:
 poetry install
 poetry run build
 ```
-It is using PyInstaller to create a binary in **dist**
 
+It is using PyInstaller to create a binary in **dist**
 
 ## Execution
 
 ### Using Poetry
 
-To run the script from anywhere in the directory execute 
+To run the script from anywhere in the directory execute
+
 ``` bash
 poetry shell
 ```
+
 Then you can call the script from anywhere
+
 ``` bash
 autolog -c example/example.toml
 ```
+
 ### Using Binary
 
-If you have build the binary you can 
+If you have build the binary you can
+
 ``` bash
 > cd dist
 > autolog -h
 ```
 
 ## Usage
+
 Usage example:
 
 `python src/autolog.py -c example/example.toml`
@@ -67,3 +73,7 @@ optional arguments:
   -h, --help         show this help message and exit
   -c, --credentials  Ask user for username, password and api_url
 ```
+
+## TOML file
+
+descriptino

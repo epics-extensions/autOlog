@@ -1,131 +1,143 @@
-import requests
-import epics
+"""Autolog main script"""
 import time
 import argparse
 import uuid
 import json
-from connection import create_auth_object
-from olog_data import read_data
+import epics
+from connection import create_auth_object, post_request
+from data import read_data
 
-def check_pv(pv):
+def define_action(pv):
     """
-    Check the value of the pv to trigger the creation of a log
+    Return True or False to indicate whether a log should be created.
     """
-    # The PV name that triggers the creation of a log
+    if 'condition' in pv:
+        pv_name = pv['condition']['condition_pv_name']
+        pv_value = pv['condition']['condition_pv_value']
+        condition = check_pv(pv_name, pv_value)
+        if not condition:
+            return False
     pv_name = pv['trigger_pv_name']
-    print(f"Name of the PV triggering the creation of a log: {pv_name}")
+    pv_value = pv['trigger_pv_value']
+    trigger_log = check_pv(pv_name, pv_value)
+    return trigger_log
 
-    # The PV value that triggers the creation of a log
-    trigger_value = pv['trigger_pv_value']
-    print(f"Trigger value: {trigger_value}")
-
-    # The actual value of the PV
-    get_pv = epics.caget(pv_name)
-    print(f"Actual PV value: {get_pv}")
-
-    # Test if actual PV value matches trigger PV value
-    if get_pv == trigger_value:
+def check_pv(pv_name, pv_value):
+    """
+    Check if actual PV value matches desired value
+    """
+    pv_actual_value = epics.caget(pv_name)
+    print(f"{pv_name}, actual value: {pv_actual_value}, list of desired one: {pv_value}")
+    if pv_actual_value in pv_value:
+        print("Match")
         return True
-    else:
-        return False
+    print("No match \n")
+    return False
 
-def post_request(autolog, pv, token, api_url, username):
+def manage_attachment_file(log_entry, file_path):
     """
-    Create and send API request to Olog server
+    Include attachment file into API request body
     """
-    # Create description with default information and user information
-    title = autolog['title']
-    description = autolog['description'] + f"\n\nThe log creation has been triggered by the pv: {pv['trigger_pv_name']}, with value: {pv['trigger_pv_value']}" + "\n\n Log created automatically by the application AutOlog"
+    attachment_id = str(uuid.uuid4())
+    attachment_name = file_path.split('/')[-1]
+    log_entry["attachments"].append({"id": f"{attachment_id}", 
+                                     "filename": f"{attachment_name}"})
+    log_entry_json = json.dumps(log_entry)
+    with open(file_path, 'rb') as file:
+        body = {
+            'logEntry': ('logEntry.json', f"{log_entry_json}", 'application/json'),
+            'files': (f"{attachment_name}", file, "application/octet-stream")
+        }
+    return body
+
+def define_autolog(username, log_info, pv):
+    """
+    Build API requestion body with log information
+    """
+    pv_name = pv['trigger_pv_name']
+    pv_actual_value = epics.caget(pv_name)
+
+    if pv['context'].get('info_pv_name') is not None:
+        info_pv_name = pv['context']['info_pv_name']
+        pv_info_value = epics.caget(info_pv_name, as_string=True)
+        more_info = f"\n\n More information from {info_pv_name}: {pv_info_value}"
+    else:
+        more_info = ""
+
+    description = log_info['description'] \
+        + f"\n\nThe log creation has been triggered by the pv: {pv_name}, \
+    with value: {pv_actual_value}" \
+        + more_info \
+        + "\n\n Log created automatically by the application AutOlog"
+
     log_entry =  {
                    "owner": f"{username}",
                    "description": f"{description}",
-                   "level": f"{autolog['level']}",
-                   "title": f"{title}",
+                   "level": f"{log_info['level']}",
+                   "title": f"{log_info['title']}",
                    "logbooks": [
                        {
-                           "name": f"{autolog['logbook']}"
+                           "name": f"{log_info['logbook']}"
                        }
                    ],
                    "attachments":[]
                }
 
-    # Header with authentication token
-    header = {
-        "Authorization": f"Basic {token}",
-    }
-    # API url to create new logs
-    log_url = api_url + "/logs/multipart"
-
-    if autolog.get('attachment_file') is not None:
-        file_path = autolog['attachment_file']
-        attachment_id = str(uuid.uuid4())
-        attachment_name = file_path.split('/')[-1]
-        log_entry["attachments"].append({"id": f"{attachment_id}", "filename": f"{attachment_name}"})
-        log_entry_json = json.dumps(log_entry)
-        files = {
-            'logEntry': ('logEntry.json', f"{log_entry_json}", 'application/json'),
-            'files': (f"{attachment_name}", open(file_path, 'rb'), "application/octet-stream")
-        }
+    if log_info.get('attachment_file') is not None:
+        file_path = log_info['attachment_file']
+        body = manage_attachment_file(log_entry, file_path)
     else:
         log_entry_json = json.dumps(log_entry)
-        files = {
+        body = {
             'logEntry': ('logEntry', f"{log_entry_json}", 'application/json')
         }
+    return body
 
-    response = requests.put(log_url, files=files, headers=header)
+def create_log(credentials, log_info, pv):
+    """
+    Prepare API request content to create new log
+    """
+    api_url = credentials['api_url']
+    username = credentials['username']
+    password = credentials['password']
 
-    # Check if the request was successful
-    if response.status_code == 200:
-        print('Log entry created successfully.')
-        print('Response:', response.json())
-    else:
-        print(f'Failed to create log entry. Status code: {response.status_code}')
-        print('Response:', response.text)
+    token = create_auth_object(api_url, username, password)
+    autolog_content = define_autolog(username, log_info, pv)
+    post_request(autolog_content, token, api_url)
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="A python tool to create automatically logs into Phoebus-Olog server, triggered by a PV value.")
-    
-    # Input toml file
+    """
+    Main function
+    """
+    parser = argparse.ArgumentParser(description=
+    "A python tool to create automatically logs into Phoebus-Olog server, triggered by a PV value.")
     parser.add_argument("config", type=str,
     help="The configuration file with all the required data.")
-    
-    # Ask user for credentials
+
     parser.add_argument("-c", "--credentials", action='store_true',
     help="Ask user for username, password and api_url")
-    
+
     args = parser.parse_args()
 
-    # Extract values from configuration file
-    log = read_data(args.config, args.credentials)
-    autolog = log['autolog']
-    pv = log['pv']
-    api_url = log['api_url']
-    username = log['username']
-    password = log['password']
-    check_time = log['check_time']
+    config = read_data(args.config, args.credentials)
+    log_info = config['autolog']
+    pv = config['pv']
+    credentials = config['credentials']
+    check_time = config['pv']['check_time']
+    create_once = False
 
-    # Get token
-    token = create_auth_object(api_url, username, password)
-    
-    # Waiting loop
+    # Main thread
     while True:
-        # If actual PV value matches trigger PV value
-        create_log = check_pv(pv)
-        if create_log:
-            
-            # Send API request to create new log
-            post_request(autolog, pv, token, api_url, username)
-            
-            # Wait for the pv value to change
-            while check_pv(pv):
-                print("The pv has triggered the creation of a log once. Its value is still equal to the trigger value. Waiting...\n")
-                time.sleep(check_time)
+        order = define_action(pv)
+        if order:
+            if not create_once:
+                create_log(credentials, log_info, pv)
+                create_once = True
+            else:
+                print("Already created once")
         else:
-            print("Condition not met. Waiting...\n")
-        
-        # Wait for 5 seconds before next check
+            create_once = False
         time.sleep(check_time)
 
 if __name__ == "__main__":
     main()
-
