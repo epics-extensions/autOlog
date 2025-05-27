@@ -1,6 +1,6 @@
 """Autolog main functionnality"""
 import logging
-from cac import caget, is_connected
+from autolog.cac import caget, is_connected
 
 def check_multiple_condition(autolog_condition: dict):
     """

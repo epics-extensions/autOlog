@@ -11,13 +11,13 @@
   description = "The beam has reached a new destination."
   level = "info"
   logbook = "tests"
-  #check_time = 3 #not required. Waiting time for the loop to check pv value, default value: 5s
+  check_time = 3 #not required. Waiting time for the loop to check pv value, default value: 5s
 
 # pv information
 [[autolog]]
   [autolog.context]
     description = "The destination is:"
-    #attachment_file = "path/to/file/file.plt"
+    attachment_file = "path/to/file/file.plt"
     [autolog.context.pv]
       info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn"
       info_pv_desc = true

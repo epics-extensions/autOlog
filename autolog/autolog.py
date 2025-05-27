@@ -2,10 +2,10 @@
 import time
 import argparse
 import logging
-from config import read_data
-from feature import trigger_action, check_multiple_condition
-from olog_api.requests import post_request
-from olog_api.olog import define_body
+from autolog.olog_api.requests import post_request
+from autolog.olog_api.olog import define_body
+from autolog.config import read_data
+from autolog.utils import trigger_action, check_multiple_condition
 
 def argparser():
     """
