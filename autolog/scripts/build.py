@@ -2,7 +2,7 @@ import PyInstaller.__main__
 from pathlib import Path
 
 HERE = Path(__file__).parent.absolute()
-path_to_main = str(HERE / "../src/autolog.py")
+path_to_main = str(HERE / "../autolog/autolog.py")
 
 def install():
     PyInstaller.__main__.run([

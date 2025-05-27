@@ -1,6 +1,8 @@
-[tool.poetry]
+[project]
 name = "autolog"
 version = "0.1.0"
+
+[tool.poetry]
 description = "Create automatically a log into Phoebus-Olog server, triggered by an EPICS PV."
 authors = ["Antoine Choquet <antoine.choquet@cea.fr>"]
 readme = "README.md"
@@ -20,8 +22,11 @@ cerberus = "^1.3.7"
 pyinstaller = "^6.12.0"
 
 [tool.poetry.scripts]
-autolog = "autolog:main"
+autolog = "autolog.autolog:main"
 build = "scripts.build:install"
+
+[tool.pylint.messages_control]
+disable = "E0401"
 
 [build-system]
 requires = ["poetry-core"]
