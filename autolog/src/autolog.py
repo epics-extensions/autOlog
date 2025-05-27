@@ -3,9 +3,9 @@ import time
 import argparse
 import logging
 from config import read_data
-from feature import define_action
+from feature import trigger_action, check_multiple_condition
 from olog_api.requests import post_request
-from olog_api.olog import define_body, create_context_desc
+from olog_api.olog import define_body
 
 def argparser():
     """
@@ -43,14 +43,18 @@ def start_loop(user_data: dict):
         for index, autolog_instance in enumerate(autolog):
             autolog_trigger = autolog_instance['trigger']
             logging.info("Handling Autolog %s of %s",{index + 1}, {len(autolog)} )
-            order = define_action(autolog_trigger, autolog_instance['condition'])
+            if autolog_instance.get('condition'):
+                condition = check_multiple_condition(autolog_instance['condition'])
+                if not condition:
+                    print("\n")
+                    break
+            order = trigger_action(autolog_trigger)
             if order:
                 if not autolog_instance.get('created_once'):
-                    context_desc = create_context_desc(autolog_trigger['trigger_pv_name'],
-                                                       autolog_instance['context'])
                     autolog_content = define_body(credentials['username'],
-                                                  context_desc,
-                                                  user_data['main_log_info'])
+                                                  autolog_trigger['trigger_pv_name'],
+                                                  user_data['main_log_info'],
+                                                  autolog_instance['context'])
                     post_request(autolog_content, credentials)
                     autolog_instance.update({'created_once': True})
                 else:

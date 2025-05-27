@@ -59,7 +59,8 @@ schema = {
                 'condition': {
                     'type': 'dict',
                     'schema': {
-                        'logical_condition': {'type': 'string', 'allowed':['and', 'or']},
+                        'logical_condition': {'type': 'string', 'allowed':['and', 'or'], 
+                                              'required': False, 'default': 'and'},
                         'pv':{
                             'type': 'list',
                             'schema': {

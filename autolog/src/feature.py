@@ -14,6 +14,12 @@ def check_multiple_condition(autolog_condition: dict):
         pv_value = condition['condition_pv_value']
         condition = check_pv(pv_name, pv_value)
         several_condition.append(condition)
+    if len(autolog_condition['pv']) == 1:
+        if True in several_condition:
+            logging.info("Condition met, waiting to be triggered...")
+            return True
+        logging.warning("Condition not met")    
+        return False
     if logical_condition == 'and':
         if all(several_condition):
             logging.info("The logical operator between condition is: %s", {logical_condition})
@@ -44,13 +50,10 @@ def check_pv(pv_name: str, pv_value: list[int]):
     logging.info("=> Result: False;")
     return False
 
-def define_action(autolog_trigger: dict, autolog_condition: dict):
+def trigger_action(autolog_trigger: dict):
     """
     Return True or False to indicate whether a log should be created.
     """
-    condition = check_multiple_condition(autolog_condition)
-    if not condition:
-        return False
     pv_name = autolog_trigger['trigger_pv_name']
     pv_value = autolog_trigger['trigger_pv_value']
     logging.info("Checking trigger PV: ")

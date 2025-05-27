@@ -1,7 +1,6 @@
 """Manage Olog API request"""
 import base64
 import logging
-import sys
 import requests
 
 def create_auth_object(api_url: str, username:str, password:str):
@@ -31,7 +30,11 @@ def create_auth_object(api_url: str, username:str, password:str):
     except requests.exceptions.MissingSchema as e:
         logging.warning("Invalid URL: %s", {e} )
         logging.warning("Check the provided credentials")
-        sys.exit()
+        return None
+    except requests.exceptions.ConnectionError as e:
+        logging.warning("Invalid URL: %s", {e} )
+        logging.warning("Olog API is unreachable, check url")
+        return None
 
 def post_request(body: dict, credentials: dict):
     """
@@ -41,6 +44,9 @@ def post_request(body: dict, credentials: dict):
     username = credentials['username']
     password = credentials['password']
     token = create_auth_object(api_url, username, password)
+    if token is None:
+        logging.warning("Unable to create token")
+        return
     # Header with authentication token
     header = {
         "Authorization": f"Basic {token}",
