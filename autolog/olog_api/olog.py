@@ -74,15 +74,22 @@ def manage_attachment_file(log_entry: dict, file_path: str):
     """
     attachment_id = str(uuid.uuid4())
     attachment_name = file_path.split('/')[-1]
-    log_entry["attachments"].append({"id": f"{attachment_id}", 
+    log_entry["attachments"].append({"id": f"{attachment_id}",
                                      "filename": f"{attachment_name}"})
     log_entry_json = json.dumps(log_entry)
-    body = {
-        'logEntry': ('logEntry.json', f"{log_entry_json}", 'application/json'),
-        'files': (f"{attachment_name}", open(file_path, 'rb'), "application/octet-stream") 
-        #todo: use with Pylint R1732:consider-using-with
-    }
-    return body
+    try:
+        body = {
+            'logEntry': ('logEntry.json', f"{log_entry_json}", 'application/json'),
+            'files': (f"{attachment_name}", open(file_path, 'rb'), "application/octet-stream")
+            #todo: use with Pylint R1732:consider-using-with
+        }
+        return body
+    except FileNotFoundError as e:
+        logging.error("Attachment file - File not found: `%s`!", {e})
+        body = {
+            'logEntry': ('logEntry', f"{log_entry_json}", 'application/json')
+        }
+        return body
 
 def create_context_desc(trigger_pv_name: str, autolog_context: dict):
     """
