@@ -1,62 +1,56 @@
 # example.toml
-# login information
-[credentials]
-  username = "<username>" #not required, can be entered using the credentials argument
-  password = "<password>"#not required, can be entered using the credentials argument
-  api_url = "<api_url>" #not required, can be entered using the credentials argument
 
-# new log information
+# login information - can be entered manually using credentials arguments
+[credentials]
+  username = "<username>"
+  password = "<password>"
+  api_url = "<api_url>"
+
+# log main informations
 [main_log_info]
   title = "Destination Reached"
   description = "The beam has reached a new destination."
   level = "info"
   logbook = "tests"
-  check_time = 3 #not required. Waiting time for the loop to check pv value, default value: 5s
+  #check_time = 3 #not required. Loop time, default value: 5s
 
-# pv information
+# autolog instance 1
 [[autolog]]
   [autolog.context]
-    description = "The destination is:"
-    attachment_file = "path/to/file/file.plt"
+    description = "The destination is:" #not required.
+    attachment_file = "/tmp/log.txt" #not required.
     [autolog.context.pv]
-      info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn"
-      info_pv_desc = true
-      as_string = 'yes'
+      info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn" #not required.
+      info_pv_desc = true #not required.
+      as_string = 'yes' #not required. Default value: 'no'
   
   [autolog.trigger]
     trigger_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCode"
     trigger_pv_value = [1,2,3,4] #list of integer
 
   [autolog.condition]
-    logical_condition = 'or'
     [[autolog.condition.pv]]
-      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
-      condition_pv_value = [0] #list of integer
+      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd" #not required.
+      condition_pv_value = [0] #not required.
 
-    [[autolog.condition.pv]]
-      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
-      condition_pv_value = [1] #list of integer
-
+# autolog instance 2
 [[autolog]]
   [autolog.context]
-    description = "The destination is (second):"
-    #attachment_file = "path/to/file/file.plt"
+    description = "The destination is (second autolog):"
     [autolog.context.pv]
       info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn"
-      info_pv_desc = true
-      as_string = 'only'
+      as_string = 'only' 
 
   [autolog.trigger]
     trigger_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCode"
-    trigger_pv_value = [1,2,3,4] #list of integer
+    trigger_pv_value = [1,2,3,4]
   
-
   [autolog.condition]
-    logical_condition = 'and'
+    logical_condition = 'or' #'and' or 'or'. Default value: 'and'
     [[autolog.condition.pv]]
       condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
-      condition_pv_value = [1] #list of integer
+      condition_pv_value = [0]
 
     [[autolog.condition.pv]]
       condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
-      condition_pv_value = [1] #list of integer
+      condition_pv_value = [1]
