@@ -48,20 +48,14 @@ def start_loop(user_data: dict):
                 condition = check_multiple_condition(autolog_instance['condition'])
                 if not condition:
                     print("\n")
-                    break
+                    continue
             order = trigger_action(autolog_trigger)
             if order:
-                if not autolog_instance.get('created_once'):
-                    autolog_content = define_body(credentials['username'],
-                                                  autolog_trigger['trigger_pv_name'],
-                                                  user_data['main_log_info'],
-                                                  autolog_instance['context'])
-                    post_request(autolog_content, credentials)
-                    autolog_instance.update({'created_once': True})
-                else:
-                    logging.warning("Already created once")
-            else:
-                autolog_instance.update({'created_once': False})
+                autolog_content = define_body(credentials['username'],
+                                              autolog_trigger['trigger_pv_name'],
+                                              user_data['main_log_info'],
+                                              autolog_instance['context'])
+                post_request(autolog_content, credentials)
             print("\n")
         time.sleep(user_data['main_log_info']['check_time'])
 

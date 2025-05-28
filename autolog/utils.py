@@ -56,6 +56,19 @@ def trigger_action(autolog_trigger: dict):
     """
     pv_name = autolog_trigger['trigger_pv_name']
     pv_value = autolog_trigger['trigger_pv_value']
+    if not autolog_trigger.get('pv_value'):
+        pv_actual_value = caget(pv_name)
+        autolog_trigger.update({'pv_value': pv_actual_value})
+    else:
+        old_value = autolog_trigger.get('pv_value')
+        pv_actual_value = caget(pv_name)
+        logging.debug("Old PV value: %s", old_value)
+        logging.debug("New PV value: %s", pv_actual_value)
+        autolog_trigger.update({'pv_value': pv_actual_value})
+        if pv_actual_value == old_value:
+            logging.warning("Already created once")
+            return False
+
     logging.info("Checking trigger PV: ")
     trigger_log = check_pv(pv_name, pv_value)
     if not trigger_log:

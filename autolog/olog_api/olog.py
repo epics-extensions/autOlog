@@ -1,6 +1,7 @@
 """Define the log to be sent to Olog"""
 import uuid
 import json
+import logging
 from autolog.cac import caget, is_connected
 
 def define_body(username: str, trigger_pv_name: str, log_info: dict, autolog_context: dict):

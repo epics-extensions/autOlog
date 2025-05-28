@@ -27,7 +27,6 @@ schema = {
         'schema': {
             'type': 'dict',
             'schema': {
-                'created_once': {'type': 'boolean', 'required': False, 'default': False},
                 'context':{
                     'type': 'dict',
                     'schema': {
@@ -43,7 +42,7 @@ schema = {
                                 'as_string': {'type': 'string', 
                                                        'required': False, 
                                                        'allowed':['yes','no','only'],
-                                                       'default': 'yes'}
+                                                       'default': 'no'}
                             }
                         }
                     }
