@@ -12,9 +12,9 @@ def argparser():
     Argument parser
     """
     parser = argparse.ArgumentParser(description=
-    "A python tool to create automatically logs into Phoebus-Olog server, triggered by a PV value.")
+    "A python tool to create automatically logs into Phoebus-Olog server, triggered by EPICS Process Variable.")
     parser.add_argument("config", type=str,
-    help="The configuration file with all the required data.")
+    help="The configuration file (TOML format) with required data.")
 
     parser.add_argument("-c", "--credentials", action='store_true',
     help="Ask user for username, password and api_url")
@@ -38,6 +38,7 @@ def start_loop(user_data: dict):
     """
     autolog = user_data['autolog']
     credentials = user_data['credentials']
+    logging.debug("Autolog %s", autolog )
     # Main thread
     while True:
         for index, autolog_instance in enumerate(autolog):

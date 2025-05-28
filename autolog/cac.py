@@ -63,7 +63,7 @@ def caget(pv_name: str, as_string: bool = False, enable_log: bool = True) -> obj
         # handle error
     if enable_log:
         if len(str(value)) < 128:
-            logging.debug("CAC: got `%s`: \n\n", {pv_name})
+            logging.debug("CAC: got `%s`:", {pv_name})
             #logging.debug(f"CAC: got `{value}`")
         else:
             logging.debug("CAC: got `%s` (value too long to be printed)", {pv_name})
