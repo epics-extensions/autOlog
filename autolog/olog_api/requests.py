@@ -24,16 +24,16 @@ def create_auth_object(api_url: str, username:str, password:str):
             auth_string = f"{username}:{password}"
             encoded_auth = base64.b64encode(auth_string.encode()).decode()
             return encoded_auth
-        logging.warning("Connection failed. Code : %s", {response.status_code})
+        logging.error("Connection failed. Code : %s", {response.status_code})
         print(response)
         return None
     except requests.exceptions.MissingSchema as e:
-        logging.warning("Invalid URL: %s", {e} )
-        logging.warning("Check the provided credentials")
+        logging.error("Invalid URL: %s", {e} )
+        logging.error("Check the provided credentials")
         return None
     except requests.exceptions.ConnectionError as e:
-        logging.warning("Invalid URL: %s", {e} )
-        logging.warning("Olog API is unreachable, check url")
+        logging.error("Invalid URL: %s", {e} )
+        logging.error("Olog API is unreachable, check url")
         return None
 
 def post_request(body: dict, credentials: dict):
@@ -45,7 +45,7 @@ def post_request(body: dict, credentials: dict):
     password = credentials['password']
     token = create_auth_object(api_url, username, password)
     if token is None:
-        logging.warning("Unable to create token")
+        logging.error("Unable to create token")
         return
     # Header with authentication token
     header = {
@@ -60,5 +60,5 @@ def post_request(body: dict, credentials: dict):
         logging.info('Log entry created successfully.')
         logging.info('Response: %s', response.json())
     else:
-        logging.warning("Failed to create log entry. Status code: %s", {response.status_code})
-        logging.warning('Response: %s', response.text)
+        logging.error("Failed to create log entry. Status code: %s", {response.status_code})
+        logging.error('Response: %s', response.text)

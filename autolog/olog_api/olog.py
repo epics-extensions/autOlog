@@ -81,7 +81,7 @@ def manage_attachment_file(log_entry: dict, file_path: str):
         body = {
             'logEntry': ('logEntry.json', f"{log_entry_json}", 'application/json'),
             'files': (f"{attachment_name}", open(file_path, 'rb'), "application/octet-stream")
-            #todo: use with Pylint R1732:consider-using-with
+            #todo: use "with":  Pylint R1732:consider-using-with
         }
         return body
     except FileNotFoundError as e:

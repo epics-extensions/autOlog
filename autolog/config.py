@@ -2,6 +2,7 @@
 import sys
 import tomli
 import cerberus
+import logging
 
 schema = {
     'credentials': {
@@ -51,8 +52,9 @@ schema = {
                     'type': 'dict',
                     'schema': {
                         'trigger_pv_name': {'type': 'string', 'required': True},
-                        'trigger_pv_value': {'type': 'list', 'required': True, 
+                        'trigger_pv_value': {'type': 'list', 'required': False,
                                              'schema': {'type': 'integer'}},
+                        'on_change': {'type': 'boolean', 'required': False, 'default': False}
                     }
                 },
                 'condition': {
@@ -94,7 +96,18 @@ def read_data(file_path: str, credentials_user_input: bool):
         data["credentials"]["api_url"] = input ("Enter the HTTP url of the Olog API: ")
     v = cerberus.Validator()
     if v.validate(data, schema): #type: ignore
+        autolog = data["autolog"]
+        for index, autolog_instance in enumerate(autolog):
+            trigger = autolog_instance['trigger']
+            if not trigger.get('trigger_pv_value') and not trigger.get('on_change'):
+                logging.error("You should provide at least 'trigger_pv_value' or 'on_change' " \
+                "into trigger section of configuration file")
+                sys.exit()
+            elif trigger.get('trigger_pv_value') and trigger.get('on_change'):
+                logging.error("You should provide 'trigger_pv_value' OR 'on_change' " \
+                "into trigger section of configuration file")
+                sys.exit()
         return v.validated(data) #type: ignore
-    print("Schema validation failed:", v.errors) #type: ignore
-    print("Configuration is invalid, please refer to README to know the parameters")
+    logging.error("Schema validation failed: %s", v.errors) #type: ignore
+    logging.error("Configuration is invalid, please refer to README to know the parameters")
     sys.exit()

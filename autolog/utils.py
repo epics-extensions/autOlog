@@ -12,13 +12,14 @@ def check_multiple_condition(autolog_condition: dict):
         logging.info("  Checking condition %s of %s", {index + 1}, {len(autolog_condition['pv'])})
         pv_name = condition['condition_pv_name']
         pv_value = condition['condition_pv_value']
+        logging.info("   - Condition value: %s;", pv_value)
         condition = check_pv(pv_name, pv_value)
         several_condition.append(condition)
     if len(autolog_condition['pv']) == 1:
         if True in several_condition:
             logging.info("Condition met, waiting to be triggered...")
             return True
-        logging.warning("Condition not met")    
+        logging.warning("Condition not met")
         return False
     if logical_condition == 'and':
         if all(several_condition):
@@ -43,7 +44,6 @@ def check_pv(pv_name: str, pv_value: list[int]):
     pv_actual_value = caget(pv_name)
     logging.info("   - PV: %s;", {pv_name})
     logging.info("   - Actual value: %s;", {pv_actual_value})
-    logging.info("   - List of desired one: %s;", pv_value)
     if pv_actual_value in pv_value:
         logging.info("=> Result: True;")
         return True
@@ -55,10 +55,13 @@ def trigger_action(autolog_trigger: dict):
     Return True or False to indicate whether a log should be created.
     """
     pv_name = autolog_trigger['trigger_pv_name']
-    pv_value = autolog_trigger['trigger_pv_value']
+    on_change = autolog_trigger['on_change']
     if not autolog_trigger.get('pv_value'):
         pv_actual_value = caget(pv_name)
         autolog_trigger.update({'pv_value': pv_actual_value})
+        logging.debug("Update PV Value in trigger dict: %s", autolog_trigger['pv_value'])
+        if on_change:
+            return False
     else:
         old_value = autolog_trigger.get('pv_value')
         pv_actual_value = caget(pv_name)
@@ -68,9 +71,10 @@ def trigger_action(autolog_trigger: dict):
         if pv_actual_value == old_value:
             logging.warning("Already created once")
             return False
-
-    logging.info("Checking trigger PV: ")
+        if on_change:
+            logging.info("   - Trigger value: on change")
+            return True
+    pv_value = autolog_trigger['trigger_pv_value']
+    logging.info("   - Trigger value: %s;", pv_value)
     trigger_log = check_pv(pv_name, pv_value)
-    if not trigger_log:
-        logging.warning("Trigger condition not met")
     return trigger_log

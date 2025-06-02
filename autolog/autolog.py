@@ -12,7 +12,8 @@ def argparser():
     Argument parser
     """
     parser = argparse.ArgumentParser(description=
-    "A python tool to create automatically logs into Phoebus-Olog server, triggered by EPICS Process Variable.")
+    "A python tool to create automatically logs into Phoebus-Olog server, " \
+    "triggered by EPICS Process Variable.")
     parser.add_argument("config", type=str,
     help="The configuration file (TOML format) with required data.")
 
@@ -38,7 +39,7 @@ def start_loop(user_data: dict):
     """
     autolog = user_data['autolog']
     credentials = user_data['credentials']
-    logging.debug("Autolog %s", autolog )
+    logging.debug("Autolog data: %s", autolog )
     # Main thread
     while True:
         for index, autolog_instance in enumerate(autolog):
@@ -49,6 +50,7 @@ def start_loop(user_data: dict):
                 if not condition:
                     print("\n")
                     continue
+            logging.info("Checking trigger PV... ")
             order = trigger_action(autolog_trigger)
             if order:
                 autolog_content = define_body(credentials['username'],
@@ -56,6 +58,8 @@ def start_loop(user_data: dict):
                                               user_data['main_log_info'],
                                               autolog_instance['context'])
                 post_request(autolog_content, credentials)
+            else:
+                logging.warning("Trigger condition not met")
             print("\n")
         time.sleep(user_data['main_log_info']['check_time'])
 

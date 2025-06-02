@@ -16,6 +16,15 @@
 
 # autolog instance 1
 [[autolog]]
+  [autolog.trigger]
+    trigger_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCode"
+    on_change = true
+
+  [autolog.condition]
+    [[autolog.condition.pv]]
+      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd" #not required.
+      condition_pv_value = [0] #not required.
+
   [autolog.context]
     description = "The destination is:" #not required.
     attachment_file = "/tmp/log.txt" #not required.
@@ -23,24 +32,9 @@
       info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn" #not required.
       info_pv_desc = true #not required.
       as_string = 'yes' #not required. Default value: 'no'
-  
-  [autolog.trigger]
-    trigger_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCode"
-    trigger_pv_value = [1,2,3,4] #list of integer
-
-  [autolog.condition]
-    [[autolog.condition.pv]]
-      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd" #not required.
-      condition_pv_value = [0] #not required.
 
 # autolog instance 2
 [[autolog]]
-  [autolog.context]
-    description = "The destination is (second autolog):"
-    [autolog.context.pv]
-      info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn"
-      as_string = 'only' 
-
   [autolog.trigger]
     trigger_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCode"
     trigger_pv_value = [1,2,3,4]
@@ -54,3 +48,9 @@
     [[autolog.condition.pv]]
       condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
       condition_pv_value = [1]
+
+  [autolog.context]
+    description = "The destination is (second autolog):"
+    [autolog.context.pv]
+      info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn"
+      as_string = 'only'
