@@ -58,8 +58,6 @@ def start_loop(user_data: dict):
                                               user_data['main_log_info'],
                                               autolog_instance['context'])
                 post_request(autolog_content, credentials)
-            else:
-                logging.warning("Trigger condition not met")
             print("\n")
         time.sleep(user_data['main_log_info']['check_time'])
 
