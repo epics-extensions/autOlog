@@ -69,6 +69,10 @@ def trigger_action(autolog_trigger: dict):
     """
     pv_name = autolog_trigger['trigger_pv_name']
     on_change = autolog_trigger['on_change']
+
+    if not is_connected(pv_name):
+        return False
+
     pv_actual_value = caget(pv_name)
 
     if 'pv_value' not in autolog_trigger:
