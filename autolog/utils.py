@@ -90,22 +90,26 @@ def trigger_action(autolog_trigger: dict):
     autolog_trigger.update({'pv_value': pv_actual_value})
     logging.debug("Update PV Value in trigger dict: %s", autolog_trigger['pv_value'])
 
-    if on_change:
-        logging.debug("   - Trigger value: on change")
-        if check_desired_pv_value(pv_name, old_value):
+    triggered = autolog_trigger.get('triggered')
+
+    if check_desired_pv_value(pv_name, old_value):
+        if triggered:
+            logging.info("Log already created once")
+        else:
             logging.debug("Same value")
             logging.info("Trigger condition not met")
-            return False
+        return False
+
+    autolog_trigger.update({'triggered': False})
+
+    if on_change:
+        logging.debug("   - Trigger value: on change")
         logging.info("Trigger condition met...")
         return True
 
     pv_value = autolog_trigger['trigger_pv_value']
-    triggered = autolog_trigger.get('triggered')
     logging.debug("   - Trigger value: %s;", pv_value)
     if check_desired_pv_value(pv_name, pv_value):
-        if triggered:
-            logging.info("Log already created once")
-            return False
         logging.info("Trigger condition met...")
         autolog_trigger.update({'triggered': True})
         return True
