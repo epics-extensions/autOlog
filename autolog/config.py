@@ -29,21 +29,24 @@ schema = {
             'type': 'dict',
             'schema': {
                 'context':{
-                    'type': 'dict',
+                    'type': 'list',
                     'schema': {
-                        'description': {'type': 'string', 'required': False},
-                        'attachment_file': {'type': 'string', 'required': False},
-                        'pv': {
-                            'type': 'dict',
-                            'schema': {
-                                'info_pv_name': {'type': 'string', 'required': False},
-                                'info_pv_desc': {'type': 'boolean', 
-                                                 'required': False, 
-                                                 'default': False },
-                                'as_string': {'type': 'string', 
-                                                       'required': False, 
-                                                       'allowed':['yes','no','only'],
-                                                       'default': 'no'}
+                        'type': 'dict',
+                        'schema': {
+                            'description': {'type': 'string', 'required': False},
+                            'attachment_file': {'type': 'string', 'required': False},
+                            'pv': {
+                                'type': 'dict',
+                                'schema': {
+                                    'info_pv_name': {'type': 'string', 'required': False},
+                                    'info_pv_desc': {'type': 'boolean',
+                                                     'required': False,
+                                                     'default': False },
+                                    'as_string': {'type': 'string',
+                                                           'required': False,
+                                                           'allowed':['yes','no','only'],
+                                                           'default': 'no'}
+                                }
                             }
                         }
                     }
@@ -100,12 +103,14 @@ def read_data(file_path: str, credentials_user_input: bool):
         for index, autolog_instance in enumerate(autolog):
             trigger = autolog_instance['trigger']
             if not trigger.get('trigger_pv_value') and not trigger.get('on_change'):
-                logging.error("You should provide at least 'trigger_pv_value' or 'on_change' " \
-                "into trigger section of configuration file")
+                logging.error("On Autolog %s: You should provide at least 'trigger_pv_value' " \
+                "or 'on_change' " \
+                "into trigger section of configuration file", index)
                 sys.exit()
             elif trigger.get('trigger_pv_value') and trigger.get('on_change'):
-                logging.error("You should provide 'trigger_pv_value' OR 'on_change' " \
-                "into trigger section of configuration file")
+                logging.error("On Autolog %s: You should provide 'trigger_pv_value' " \
+                "OR 'on_change' " \
+                "into trigger section of configuration file", index)
                 sys.exit()
         return v.validated(data) #type: ignore
     logging.error("Schema validation failed: %s", v.errors) #type: ignore

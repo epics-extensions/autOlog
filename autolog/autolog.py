@@ -53,10 +53,14 @@ def start_loop(user_data: dict):
             logging.info("Checking trigger PV... ")
             order = trigger_action(autolog_trigger)
             if order:
+                if 'context' in autolog_instance:
+                    context = autolog_instance['context']
+                else:
+                    context = {}
                 autolog_content = define_body(credentials['username'],
                                               autolog_trigger['trigger_pv_name'],
                                               user_data['main_log_info'],
-                                              autolog_instance['context'])
+                                              context)
                 post_request(autolog_content, credentials)
             print("\n")
         time.sleep(user_data['main_log_info']['check_time'])

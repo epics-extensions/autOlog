@@ -8,7 +8,10 @@ def define_body(username: str, trigger_pv_name: str, log_info: dict, autolog_con
     """
     Build API request body with log information
     """
-    context_desc = create_context_desc(trigger_pv_name, autolog_context)
+    if autolog_context == {}:
+        context_desc = ""
+    else:
+        context_desc = create_context_desc(trigger_pv_name, autolog_context)
     main_desc = f"{log_info['description']}\n\n" + context_desc
     log_entry =  {
                    "owner": f"{username}",
@@ -23,7 +26,7 @@ def define_body(username: str, trigger_pv_name: str, log_info: dict, autolog_con
                    "attachments":[]
                }
 
-    if autolog_context.get('attachment_file') is not None:
+    if 'attachment_file' in autolog_context :
         file_path = autolog_context['attachment_file']
         body = manage_attachment_file(log_entry, file_path)
     else:
@@ -39,10 +42,10 @@ def get_more_info(autolog_context: dict):
     """
     context_pv = autolog_context['pv']
     as_string = context_pv['as_string']
-    more_info = "\n\n [Context] \n\n"
-    if autolog_context.get('description'):
-        autolog_desc = autolog_context.get('description')
-        more_info = more_info + f"{autolog_desc} \n\n"
+    more_info = ""
+    if 'description' in autolog_context:
+        autolog_desc = autolog_context['description']
+        more_info = more_info + f"\n\n {autolog_desc} \n\n"
     if not context_pv.get("info_pv_name"):
         return more_info
     pv_name = context_pv['info_pv_name']
@@ -53,15 +56,14 @@ def get_more_info(autolog_context: dict):
     info_pv_value_as_string = caget(pv_name, as_string=True)
     if as_string == "yes":
         more_info = more_info +\
-                    f"- [PV_VALUE] : {info_pv_value},\n\n" + \
-                    f"- [PV_VALUE_AS_STRING] : {info_pv_value_as_string}"
+                    f"- {info_pv_value},\n\n" + \
+                    f"- {info_pv_value_as_string}"
     elif as_string == "only":
         more_info = more_info +\
-                    f"- [PV_VALUE_AS_STRING] : {info_pv_value_as_string}"
+                    f"- {info_pv_value_as_string}"
     elif as_string == "no":
         more_info = more_info +\
-                    f"- [PV_VALUE] : {info_pv_value}"
-    more_info = more_info + f"\n\n - [PV_NAME] : {pv_name}"
+                    f"- {info_pv_value}"
     desc = context_pv['info_pv_desc']
     if desc:
         desc_pv = caget(f"{pv_name}.DESC")
@@ -95,11 +97,12 @@ def create_context_desc(trigger_pv_name: str, autolog_context: dict):
     """
     Create the description part of the log entry
     """
-
-    if autolog_context.get('pv'):
-        more_info = get_more_info(autolog_context)
-    else:
-        more_info = ""
+    more_info = "\n\n [Context] \n\n"
+    for index, context in enumerate(autolog_context):
+        if context.get('pv'):
+            more_info = more_info + get_more_info(context)
+        else:
+            more_info = more_info + ""
 
     pv_actual_value = caget(trigger_pv_name)
     context_desc =\
