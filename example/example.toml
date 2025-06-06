@@ -25,7 +25,7 @@
       condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd" #not required.
       condition_pv_value = [0] #not required.
 
-  [autolog.context]
+  [[autolog.context]]
     description = "The destination is:" #not required.
     attachment_file = "/tmp/log.txt" #not required.
     [autolog.context.pv]
@@ -49,7 +49,7 @@
       condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
       condition_pv_value = [1]
 
-  [autolog.context]
+  [[autolog.context]]
     description = "The destination is (second autolog):"
     [autolog.context.pv]
       info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn"
