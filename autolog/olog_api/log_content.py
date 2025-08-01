@@ -12,6 +12,14 @@ def define_body(username: str, trigger_pv_name: str, log_info: dict, autolog_con
     context_desc = create_context_desc(trigger_pv_name, autolog_context)
     main_desc = f"{log_info['description']}\n\n" + context_desc
 
+    # Initialize the tags list
+    tags_list = []
+
+    if 'tags' in log_info:
+        for tag in log_info['tags']:
+            logging.debug("TAGS NAME: %s", {tag})
+            tags_list.append({"name": tag})
+
     log_entry =  {
                    "owner": f"{username}",
                    "description": f"{main_desc}",
@@ -22,8 +30,13 @@ def define_body(username: str, trigger_pv_name: str, log_info: dict, autolog_con
                            "name": f"{log_info['logbook']}"
                        }
                    ],
+                   "tags": [],
                    "attachments":[]
                }
+
+    # Add tags to log_entry if tags_list is not empty
+    if tags_list:
+        log_entry["tags"] = tags_list
 
     if 'attachment_file' in autolog_context :
         file_path = autolog_context['attachment_file']

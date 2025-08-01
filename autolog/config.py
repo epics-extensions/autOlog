@@ -17,6 +17,8 @@ schema = {
         'type': 'dict',
         'schema': {
             'title': {'type': 'string', 'required': True},
+            'tags':  {'type': 'list', 'required': False, 
+                    'schema': {'type': 'string'}},
             'description': {'type': 'string', 'required': True},
             'level': {'type': 'string', 'required': True},
             'logbook': {'type': 'string', 'required': True},
