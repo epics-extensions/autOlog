@@ -1,9 +1,11 @@
-"""test utils"""
+"""test utils
+simulated_pv: pvs simulated by tests/pytest/env/ioc.py
+"""
 import pytest
 from epics import caput
 from autolog.utils import define_trigger_action
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_define_trigger_action_on_change(simulated_pv):
     """
     Test check_desired_value in autolog/utils
@@ -24,7 +26,7 @@ def test_define_trigger_action_on_change(simulated_pv):
     value = define_trigger_action(autolog_trigger)
     assert value is True
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_define_trigger_action_int(simulated_pv):
     """
     Test check_desired_value in autolog/utils
@@ -44,7 +46,7 @@ def test_define_trigger_action_int(simulated_pv):
     value = define_trigger_action(autolog_trigger)
     assert value is True
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_define_trigger_action_list(simulated_pv):
     """
     Test check_desired_value in autolog/utils
@@ -64,7 +66,7 @@ def test_define_trigger_action_list(simulated_pv):
     value = define_trigger_action(autolog_trigger)
     assert value is True
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_define_trigger_action_not_connected(simulated_pv):
     """
     Test check_desired_value in autolog/utils

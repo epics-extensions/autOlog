@@ -74,10 +74,9 @@ The result in Phoebus-Olog client for autolog instance 1:
 The result in Phoebus-Olog client for autolog instance 2:
 
 !["autolog instance 1"](doc/resources/autolog-2.png)
-
 ## Tests
 
 `poetry run pytest`
 
-for unit
-`poetry run pytest -m unit`
+unit test, for example to test log_content.py:
+`poetry run pytest -m log_content`

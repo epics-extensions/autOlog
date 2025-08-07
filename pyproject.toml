@@ -28,8 +28,16 @@ autolog = "autolog.autolog:main"
 build = "scripts.build:install"
 
 [tool.pytest.ini_options]
+testpaths = [ "tests/pytest" ]
 markers = [
     "unit: marks tests as unit",
+    "cac",
+    "log_content",
+    "utils",
+    "requests",
+    "log_content",
+    "config",
+    "autolog"
 ]
 
 [build-system]
