@@ -1,0 +1,20 @@
+# login information - can be entered manually using credentials arguments
+[credentials]
+username = "admin"
+password = "adminPass"
+api_url = "http://server:8080/Olog"
+
+# log main informations
+[main_log_info]
+title = "test title"
+description = "test description"
+level = "info"
+logbook = "operations"
+check_time = 4  # not required. Loop time, default value: 5s
+attachment_files = ["/var/lib/autolog/autolog.log"]
+
+# autolog instance 1
+[[autolog]]
+[autolog.trigger]
+trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG"
+on_change = true

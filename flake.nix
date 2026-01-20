@@ -53,5 +53,7 @@
           ];
         });
 
+    checks.x86_64-linux.default =
+      pkgs.callPackage ./tests/nix-test {inherit nixpkgs autolog epnix;};
   };
 }

@@ -1,0 +1,40 @@
+# DB for tests
+
+record(ai, "AUTOLOG-TEST:TRIGGER-LOG") {
+  field(VAL, 5)
+  field(SCAN, "1 second")
+}
+
+record(ai, "AUTOLOG-TEST:TRIGGER-LOG-1") {
+  field(VAL, 5)
+  field(SCAN, "1 second")
+}
+
+record(ai, "AUTOLOG-TEST:CONDITION") {
+  field(VAL, 5)
+  field(SCAN, "1 second")
+}
+
+record(ai, "AUTOLOG-TEST:CONDITION-1") {
+  field(VAL, 5)
+  field(SCAN, "1 second")
+}
+
+record(ai, "AUTOLOG-TEST:CONDITION-2") {
+  field(VAL, 5)
+  field(SCAN, "1 second")
+}
+
+record(ai, "AUTOLOG-TEST:CONTEXT") {
+  field(DESC, "Description PV CONTEXT")
+  field(VAL, 5)
+  field(SCAN, "1 second")
+}
+
+record(ai, "AUTOLOG-TEST:CONTEXT-1") {
+  field(VAL, 5)
+  field(DESC, "Description PV CONTEXT 1")
+  field(SCAN, "1 second")
+}
+
+
