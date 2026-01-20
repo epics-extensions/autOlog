@@ -7,3 +7,6 @@ dist/
 # gitlab-runner: local exec
 builds/
 *.log
+result
+.nixos-test-history
+example/test.toml
