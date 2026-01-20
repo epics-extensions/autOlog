@@ -25,7 +25,6 @@ def create_auth_object(api_url: str, username:str, password:str):
             encoded_auth = base64.b64encode(auth_string.encode()).decode()
             return encoded_auth
         logging.error("Connection failed. Code : %s", {response.status_code})
-        print(response)
         return None
     except requests.exceptions.MissingSchema as e:
         logging.error("Invalid URL: %s", {e} )

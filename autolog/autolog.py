@@ -5,7 +5,7 @@ import logging
 from autolog.olog_api.requests import post_request
 from autolog.olog_api.olog import define_body
 from autolog.config import read_data
-from autolog.utils import trigger_action, check_multiple_condition
+from autolog.utils import define_trigger_action, check_multiple_condition
 
 def argparser():
     """
@@ -48,10 +48,10 @@ def start_loop(user_data: dict):
             if autolog_instance.get('condition'):
                 condition = check_multiple_condition(autolog_instance['condition'])
                 if not condition:
-                    print("\n")
+                    logging.info("\n")
                     continue
             logging.info("Checking trigger PV... ")
-            order = trigger_action(autolog_trigger)
+            order = define_trigger_action(autolog_trigger)
             if order:
                 if 'context' in autolog_instance:
                     context = autolog_instance['context']
@@ -62,7 +62,7 @@ def start_loop(user_data: dict):
                                               user_data['main_log_info'],
                                               context)
                 post_request(autolog_content, credentials)
-            print("\n")
+            logging.info("\n")
         time.sleep(user_data['main_log_info']['check_time'])
 
 def main() -> None:

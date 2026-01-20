@@ -1,8 +1,8 @@
 """Check and load data from a TOML configuration file, exit if not correct"""
 import sys
+import logging
 import tomli
 import cerberus
-import logging
 
 schema = {
     'credentials': {
