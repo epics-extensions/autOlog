@@ -12,6 +12,8 @@ def check_multiple_condition(autolog_condition: dict):
         logging.info("  Checking condition %s of %s ...",
                       {index + 1}, {len(autolog_condition['pv'])})
         pv_name = condition['condition_pv_name']
+        if not is_connected(pv_name):
+            return False
         pv_value = condition['condition_pv_value']
         logging.debug("   - Condition value: %s;", pv_value)
         condition = check_desired_pv_value(pv_name, pv_value)
@@ -63,7 +65,7 @@ def check_desired_pv_value(pv_name, pv_desired_value):
     logging.debug("=> Result: False;")
     return False
 
-def trigger_action(autolog_trigger: dict):
+def define_trigger_action(autolog_trigger: dict):
     """
     Return True or False to indicate whether a log should be created.
     """
