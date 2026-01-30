@@ -24,14 +24,14 @@ poetry install
 To use it:
 
 ```bash
-poetry run python -m autolog.autolog
+poetry run autolog -h
 ```
 
 Or:
 
 ```bash
-poetry shell
-autolog -h
+poetry run python -m autolog.autolog -h
+
 ```
 
 ### Using Binary
