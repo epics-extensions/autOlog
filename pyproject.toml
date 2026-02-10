@@ -1,34 +1,31 @@
 [project]
 name = "autolog"
 version = "0.1.0"
+requires-python = ">=3.9,<3.14"
+dependencies = [
+"requests > 2.32.3",
+"pyepics > 3.5.7",
+"pybase64 > 1.4.0",
+"urllib3 > 1.26.6",
+"cerberus > 1.3.7",
+"tomli (>=2.4.0,<3.0.0)",
+ ]
 
 [tool.poetry]
 description = "Create automatically a log into Phoebus-Olog server, triggered by an EPICS PV."
 authors = ["Antoine Choquet <antoine.choquet@cea.fr>"]
 readme = "README.md"
 
-[tool.poetry.dependencies]
-python = ">=3.9,<3.14"
-requests = "^2.32.3"
-pyepics = "^3.5.7"
-pytime = "^0.2.3"
-argparse = "^1.4.0"
-tomli = "^2.2.1"
-pybase64 = "^1.4.0"
-urllib3 = "^1.26.6"
-cerberus = "^1.3.7"
+[dependency-groups]
+dev = [
+"pyinstaller > 6.12.0",
+"pytest > 8.4.0",
+"caproto > 1.2.0"
+]
 
-[tool.poetry.group.dev.dependencies]
-pyinstaller = "^6.12.0"
-pytest = "^8.4.0"
-caproto = "^1.2.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 autolog = "autolog.autolog:main"
 build = "scripts.build:install"
-
-[tool.pylint.messages_control]
-disable = "E0401"
 
 [tool.pytest.ini_options]
 markers = [
