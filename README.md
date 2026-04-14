@@ -127,6 +127,10 @@ Can be entered manually using the credentials argument.
   logbook = "controls"
   tags = ["Autolog","Test"] #not required
   check_time = 3 #not required. Loop time, default value: 5s
+  attachment_files = [ "example/test.txt" ]  # absolute or relative path to the location where the script is being run
+
+
+
 ```
 
 - **`title`** (required): The title of the log entry.
@@ -135,6 +139,7 @@ Can be entered manually using the credentials argument.
 - **`logbook`** (required): The logbook to which the entry belongs.
 - **`tags`** (optional): Tags associated with the log entry.
 - **`check_time`** (optional): Loop time for checking conditions, default value is 5 seconds.
+- **`attachment_files`** (optional): Files to attach to the log
 
 ### Autolog Instances
 

@@ -2,57 +2,64 @@
 
 # login information - can be entered manually using credentials argument
 [credentials]
-   username = "<username>"
-   password = "<password>"
-   api_url = "<api_url>"
+username = "<username>"
+password = "<password>"
+api_url = "<api_url>"
 
 # log main informations
 [main_log_info]
-  title = "Here is the title of the log"
-  description = "Here is the description of the log"
-  level = "info"
-  logbook = "controls"
-  tags = ["Autolog","Test"] #not required
-  check_time = 3 #not required. Loop time, default value: 5s
+title = "Here is the title of the log"
+description = "Here is the description of the log"
+level = "info"
+logbook = "controls"
+tags = ["Autolog", "Test"]  # not required
+check_time = 3  # not required. Loop time, default value: 5s
+attachment_files = [
+  "example/test.txt"
+]  # absolute or relative path to the location where the script is being run
 
 # autolog instance 1
 [[autolog]]
-  [autolog.trigger]
-    trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG"
-    on_change = true
+[autolog.trigger]
+trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG"
+on_change = true
 
-  [autolog.condition] #not required
-    [[autolog.condition.pv]] 
-      condition_pv_name = "AUTOLOG-TEST:CONDITION"
-      condition_pv_value = [0]
+[autolog.condition]  # not required
+[[autolog.condition.pv]]
+condition_pv_name = "AUTOLOG-TEST:CONDITION"
+condition_pv_value = [0]
 
-  [[autolog.context]] #not required
-    description = "The context of the first autolog instance:"
-    [autolog.context.pv]
-      info_pv_name = "AUTOLOG-TEST:CONTEXT"
-      info_pv_desc = true
-      as_string = 'yes' # Default value: 'no'
+[[autolog.context]]  # not required
+description = "The context of the first autolog instance:"
+
+[autolog.context.pv]
+info_pv_name = "AUTOLOG-TEST:CONTEXT"
+info_pv_desc = true
+as_string = "yes"  # Default value: 'no'
 
 # autolog instance 2
 [[autolog]]
-  [autolog.trigger]
-    trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG-1"
-    trigger_pv_value = [1,2,3,4]
-  
-  [autolog.condition] #not required
-    logical_condition = 'or' #'and' or 'or'. Default value: 'and'
-    [[autolog.condition.pv]]
-      condition_pv_name = "AUTOLOG-TEST:CONDITION-1"
-      condition_pv_value = [0]
+[autolog.trigger]
+trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG-1"
+trigger_pv_value = [1, 2, 3, 4]
 
-    [[autolog.condition.pv]]
-      condition_pv_name = "AUTOLOG-TEST:CONDITION-2"
-      condition_pv_value = [1]
+[autolog.condition]  # not required
+logical_condition = "or"  # 'and' or 'or'. Default value: 'and'
 
-  [[autolog.context]] #not required
-    description = "The context 1 of the second autolog instance:"
-    [autolog.context.pv]
-      info_pv_name = "AUTOLOG-TEST:CONTEXT-1"
-      as_string = 'only'
-  [[autolog.context]]
-    description = "The context 2 of the second autolog instance:"
+[[autolog.condition.pv]]
+condition_pv_name = "AUTOLOG-TEST:CONDITION-1"
+condition_pv_value = [0]
+
+[[autolog.condition.pv]]
+condition_pv_name = "AUTOLOG-TEST:CONDITION-2"
+condition_pv_value = [1]
+
+[[autolog.context]]  # not required
+description = "The context 1 of the second autolog instance:"
+
+[autolog.context.pv]
+info_pv_name = "AUTOLOG-TEST:CONTEXT-1"
+as_string = "only"
+
+[[autolog.context]]
+description = "The context 2 of the second autolog instance:"
