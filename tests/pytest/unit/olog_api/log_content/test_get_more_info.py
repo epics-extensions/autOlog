@@ -61,8 +61,10 @@ def test_get_more_info_with_pv(simulated_pv, mock_autolog_context):
 
     # Verify the more_info
     assert "Test Context" in more_info
+    assert "simple:intA" in more_info
     assert "42" in more_info  # Verify the PV value is in the context
-    assert "PV_DESC" in more_info  # Verify the PV description is included
+    assert "pv_context_name" in more_info
+    assert "pv_context_desc" in more_info  # Verify the PV description is included
 
 @pytest.mark.log_content
 def test_get_more_info_without_pv(simulated_pv, mock_autolog_context_no_pv_name):
@@ -85,7 +87,7 @@ def test_get_more_info_without_desc(simulated_pv, mock_autolog_context_no_desc):
 
     # Verify the more_info
     assert "24" in more_info  # Verify the PV value is in the context
-    assert "PV_DESC" not in more_info  # Since info_pv_desc is False
+    assert "pv_context_desc" not in more_info  # Since info_pv_desc is False
 
 @pytest.mark.log_content
 def test_get_more_info_with_float_pv(simulated_pv):
@@ -109,7 +111,7 @@ def test_get_more_info_with_float_pv(simulated_pv):
     # Verify the more_info
     assert "Float Context" in more_info
     assert "3.14" in more_info  # Verify the PV value is in the context
-    assert "PV_DESC" in more_info  # Verify the PV description is included
+    assert "pv_context_desc" in more_info  # Verify the PV description is included
 
 @pytest.mark.log_content
 def test_get_more_info_with_enum_pv(simulated_pv, mock_autolog_context_with_enum):
@@ -120,7 +122,7 @@ def test_get_more_info_with_enum_pv(simulated_pv, mock_autolog_context_with_enum
 
     # Verify the more_info
     assert "Enum Context" in more_info
-    assert "PV_DESC" in more_info  # Verify the PV description is included
+    assert "pv_context_desc" in more_info  # Verify the PV description is included
     assert "zero" in more_info #field ZRST mbbiA simulated pv
 
     # Verify the enum value is in the context (could be "zero", "one", etc.)

@@ -106,7 +106,7 @@ def test_define_body_with_several_context(simulated_pv, mock_log_info, mock_auto
     log_entry = json.loads(body['logEntry'][1])
     assert "Context 1" in log_entry["description"]
     assert "Context 2" in log_entry["description"]
-    assert "[PV_DESC]" in log_entry["description"]
+    assert "[pv_context_desc]" in log_entry["description"]
 
     # Verify tags are included
     assert len(log_entry["tags"]) == 2

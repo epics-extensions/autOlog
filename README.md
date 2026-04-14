@@ -188,6 +188,6 @@ The `[[autolog.context]]` section is optional, and can be repeated multiple time
 - **`description`** (optional): A description for the context.
 - **`attachment_file`** (optional): The path to an attachment file.
 - **`info_pv_name`** (optional): The name of the context PV.
+- **`as_string`** (optional): If set to `'yes'` or `'only'`, the PV value is treated as a string. Default value is `'no'`. Useful for mbbi/mbbo PVs, for example.
 - **`info_pv_desc`** (optional): If set to `true`, includes the description of the PV.
-- **`as_string`** (optional): If set to `'yes'` or `'only'`, the PV value is treated as a string. Default value is `'no'`.
 

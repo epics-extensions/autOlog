@@ -61,7 +61,7 @@ def get_more_info(autolog_context: dict):
         return more_info
 
     context_pv = autolog_context['pv']
-    pv_name = context_pv['info_pv_name']
+    pv_name = str(context_pv['info_pv_name'])
 
     if not is_connected(pv_name):
         more_info += "Not connected"
@@ -70,19 +70,19 @@ def get_more_info(autolog_context: dict):
     info_pv_value = caget(pv_name)
 
     as_string = context_pv['as_string']
+    more_info += f"\n- [pv_context_name] {pv_name} \n\n"
     if as_string == "yes":
         info_pv_value_as_string = caget(pv_name, as_string=True)
-        more_info += f"- {info_pv_value},\n\n- {info_pv_value_as_string}"
+        more_info += f"- [pv_context_value] {info_pv_value} \n\n - [pv_context_value_as_string] {info_pv_value_as_string} \n\n"
     elif as_string == "only":
         info_pv_value_as_string = caget(pv_name, as_string=True)
-        more_info += f"- {info_pv_value_as_string}"
+        more_info += f"- [pv_context_value_as_string] {info_pv_value_as_string} \n\n"
     else:
-        more_info += f"- {info_pv_value}"
+        more_info += f"- [pv_context_value] {info_pv_value} \n\n"
 
     if context_pv.get('info_pv_desc', False):
         desc_pv = caget(f"{pv_name}.DESC")
-        more_info += f"\n\n- [PV_DESC]: {desc_pv}\n\n"
-    more_info += f"\n\n- [PV_NAME]: {pv_name}\n\n"
+        more_info += f"- [pv_context_desc]: {desc_pv}"
     return more_info
 
 def manage_attachment_file(log_entry: dict, file_path: str):
