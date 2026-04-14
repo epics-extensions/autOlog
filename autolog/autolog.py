@@ -13,7 +13,7 @@ def argparser():
     """
     parser = argparse.ArgumentParser(description=
     "A python tool to create automatically logs into Phoebus-Olog server, " \
-    "triggered by EPICS Process Variable.")
+    "triggered by EPICS Process Variables.")
     parser.add_argument("config", type=str,
     help="The configuration file (TOML format) with required data.")
 
