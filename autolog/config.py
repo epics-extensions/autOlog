@@ -23,6 +23,11 @@ schema = {
             "level": {"type": "string", "required": True},
             "logbook": {"type": "string", "required": True},
             "check_time": {"type": "integer", "required": False, "default": 5},
+            "attachment_files": {
+                "type": "list",
+                "required": False,
+                "schema": {"type": "string"},
+            },
         },
     },
     "autolog": {
@@ -36,7 +41,6 @@ schema = {
                         "type": "dict",
                         "schema": {
                             "description": {"type": "string", "required": False},
-                            "attachment_file": {"type": "string", "required": False},
                             "pv": {
                                 "type": "dict",
                                 "schema": {

@@ -1,9 +1,7 @@
 """Define the log to be sent to Olog"""
 
-import uuid
-import json
 import logging
-import os
+from os.path import abspath
 from autolog.cac import caget, is_connected
 
 
@@ -16,14 +14,6 @@ def define_body(
     context_desc = create_context_desc(trigger_pv_name, autolog_context)
     main_desc = f"{log_info['description']}\n\n" + context_desc
 
-    # Initialize the tags list
-    tags_list = []
-
-    if "tags" in log_info:
-        for tag in log_info["tags"]:
-            logging.debug("TAGS NAME: %s", {tag})
-            tags_list.append({"name": tag})
-
     log_entry = {
         "owner": f"{username}",
         "description": f"{main_desc}",
@@ -34,17 +24,22 @@ def define_body(
         "attachments": [],
     }
 
-    # Add tags to log_entry if tags_list is not empty
-    if tags_list:
+    tags_list = []
+
+    if "tags" in log_info:
+        for tag in log_info["tags"]:
+            logging.debug("TAGS NAME: %s", {tag})
+            tags_list.append({"name": tag})
         log_entry["tags"] = tags_list
 
-    if "attachment_file" in autolog_context:
-        file_path = autolog_context["attachment_file"]
-        body = manage_attachment_file(log_entry, file_path)
-    else:
-        log_entry_json = json.dumps(log_entry)
-        body = {"logEntry": ("logEntry", f"{log_entry_json}", "application/json")}
-    return body
+    attachment_file_paths = []
+
+    if "attachment_files" in log_info:
+        for attachment_file in log_info["attachment_files"]:
+            filename = abspath(attachment_file)
+            attachment_file_paths.append(filename)
+
+    return log_entry, attachment_file_paths
 
 
 def get_more_info(context: dict):
@@ -83,33 +78,6 @@ def get_more_info(context: dict):
         desc_pv = caget(f"{pv_name}.DESC")
         more_info += f"- [pv_context_desc]: {desc_pv}"
     return more_info
-
-
-def manage_attachment_file(log_entry: dict, file_path: str):
-    """
-    Include attachment file into API request body
-    """
-    attachment_id = str(uuid.uuid4())
-    attachment_name = file_path.split("/")[-1]
-    log_entry["attachments"].append(
-        {"id": f"{attachment_id}", "filename": f"{attachment_name}"}
-    )
-    log_entry_json = json.dumps(log_entry)
-    try:
-        body = {
-            "logEntry": ("logEntry.json", f"{log_entry_json}", "application/json"),
-            "files": (
-                f"{attachment_name}",
-                open(file_path, "rb"),
-                "application/octet-stream",
-            ),
-            # todo: use "with":  Pylint R1732:consider-using-with
-        }
-        return body
-    except FileNotFoundError as e:
-        logging.error("Attachment file - File not found: `%s`!", {e})
-        body = {"logEntry": ("logEntry", f"{log_entry_json}", "application/json")}
-        return body
 
 
 def create_context_desc(trigger_pv_name: str, autolog_context: dict):
