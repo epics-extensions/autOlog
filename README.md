@@ -142,7 +142,7 @@ The `[[autolog]]` section can be repeated multiple times to define different aut
 
 ```toml
 [autolog.trigger]
-  trigger_pv_name = "PV-NAME:TRIGGER-LOG"
+  trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG"
   on_change = true # Use either `on_change` or `trigger_pv_value`
   trigger_pv_value = [1, 2, 3, 4] # Use either `on_change` or `trigger_pv_value`
 ```
@@ -160,11 +160,11 @@ The `[[autolog.condition.pv]]` section is optional, and can be repeated multiple
 [autolog.condition] #not required
   logical_condition = 'or' #'and' or 'or'. Default value: 'and'
   [[autolog.condition.pv]]
-    condition_pv_name = "PV-NAME:CONDITION-1"
+    condition_pv_name = "AUTOLOG-TEST:CONDITION-1"
     condition_pv_value = [0]
 
   [[autolog.condition.pv]]
-    condition_pv_name = "PV-NAME:CONDITION-2"
+    condition_pv_name = "AUTOLOG-TEST:CONDITION-2"
     condition_pv_value = [1]
 ```
 
