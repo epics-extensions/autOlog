@@ -48,19 +48,19 @@ def define_body(username: str, trigger_pv_name: str, log_info: dict, autolog_con
         }
     return body
 
-def get_more_info(autolog_context: dict):
+def get_more_info(context: dict):
     """
     Get more info with PV provided as key "info_pv_name" in TOML file.
     """
     more_info = "\n\n[Context]\n\n"
 
-    if 'description' in autolog_context:
-        more_info += f"\n\n{autolog_context['description']}\n\n"
+    if 'description' in context:
+        more_info += f"\n\n{context['description']}\n\n"
 
-    if 'pv' not in autolog_context or not autolog_context['pv'].get("info_pv_name"):
+    if 'pv' not in context or not context['pv'].get("info_pv_name"):
         return more_info
 
-    context_pv = autolog_context['pv']
+    context_pv = context['pv']
     pv_name = str(context_pv['info_pv_name'])
 
     if not is_connected(pv_name):
