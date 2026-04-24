@@ -1,9 +1,11 @@
-"""test utils"""
+"""test utils
+simulated_pv: pvs simulated by tests/pytest/env/ioc.py
+"""
 import pytest
 from epics import caput
 from autolog.utils import check_multiple_condition
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_check_single_condition(simulated_pv):
     """
     Test check_desired_multiple_condition in autolog/utils
@@ -42,7 +44,7 @@ def test_check_single_condition(simulated_pv):
     value = check_multiple_condition(autolog_condition)
     assert value is True
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_check_multiple_condition_or(simulated_pv):
     """
     Test check_desired_multiple_condition in autolog/utils
@@ -73,7 +75,7 @@ def test_check_multiple_condition_or(simulated_pv):
     value = check_multiple_condition(autolog_condition)
     assert value is True
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_check_multiple_condition_and(simulated_pv):
     """
     Test check_desired_multiple_condition in autolog/utils
@@ -104,7 +106,7 @@ def test_check_multiple_condition_and(simulated_pv):
     value = check_multiple_condition(autolog_condition)
     assert value is True
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_check_multiple_condition_not_connected(simulated_pv):
     """
     Test check_desired_multiple_condition in autolog/utils

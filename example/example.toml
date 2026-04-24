@@ -1,56 +1,58 @@
 # example.toml
 
-# login information - can be entered manually using credentials arguments
+# login information - can be entered manually using credentials argument
 [credentials]
-  username = "<username>"
-  password = "<password>"
-  api_url = "<api_url>"
+   username = "<username>"
+   password = "<password>"
+   api_url = "<api_url>"
 
 # log main informations
 [main_log_info]
-  title = "Destination Reached"
-  description = "The beam has reached a new destination."
+  title = "Here is the title of the log"
+  description = "Here is the description of the log"
   level = "info"
-  logbook = "tests"
-  #check_time = 3 #not required. Loop time, default value: 5s
+  logbook = "controls"
+  tags = ["Autolog","Test"] #not required
+  check_time = 3 #not required. Loop time, default value: 5s
 
 # autolog instance 1
 [[autolog]]
   [autolog.trigger]
-    trigger_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCode"
+    trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG"
     on_change = true
 
-  [autolog.condition]
-    [[autolog.condition.pv]]
-      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd" #not required.
-      condition_pv_value = [0] #not required.
+  [autolog.condition] #not required
+    [[autolog.condition.pv]] 
+      condition_pv_name = "AUTOLOG-TEST:CONDITION"
+      condition_pv_value = [0]
 
-  [[autolog.context]]
-    description = "The destination is:" #not required.
-    attachment_file = "/tmp/log.txt" #not required.
+  [[autolog.context]] #not required
+    description = "The context of the first autolog instance:"
     [autolog.context.pv]
-      info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn" #not required.
-      info_pv_desc = true #not required.
-      as_string = 'yes' #not required. Default value: 'no'
+      info_pv_name = "AUTOLOG-TEST:CONTEXT"
+      info_pv_desc = true
+      as_string = 'yes' # Default value: 'no'
 
 # autolog instance 2
 [[autolog]]
   [autolog.trigger]
-    trigger_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCode"
+    trigger_pv_name = "AUTOLOG-TEST:TRIGGER-LOG-1"
     trigger_pv_value = [1,2,3,4]
   
-  [autolog.condition]
+  [autolog.condition] #not required
     logical_condition = 'or' #'and' or 'or'. Default value: 'and'
     [[autolog.condition.pv]]
-      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
+      condition_pv_name = "AUTOLOG-TEST:CONDITION-1"
       condition_pv_value = [0]
 
     [[autolog.condition.pv]]
-      condition_pv_name = "SL-APP-MCS:BOM-CPU:StartBeamCmd"
+      condition_pv_name = "AUTOLOG-TEST:CONDITION-2"
       condition_pv_value = [1]
 
-  [[autolog.context]]
-    description = "The destination is (second autolog):"
+  [[autolog.context]] #not required
+    description = "The context 1 of the second autolog instance:"
     [autolog.context.pv]
-      info_pv_name = "SL-APP-MCS:BOM-CPU:BeamDestCodeTextIn"
+      info_pv_name = "AUTOLOG-TEST:CONTEXT-1"
       as_string = 'only'
+  [[autolog.context]]
+    description = "The context 2 of the second autolog instance:"

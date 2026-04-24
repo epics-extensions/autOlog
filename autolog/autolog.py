@@ -3,7 +3,7 @@ import time
 import argparse
 import logging
 from autolog.olog_api.requests import post_request
-from autolog.olog_api.olog import define_body
+from autolog.olog_api.log_content import define_body
 from autolog.config import read_data
 from autolog.utils import define_trigger_action, check_multiple_condition
 
@@ -13,7 +13,7 @@ def argparser():
     """
     parser = argparse.ArgumentParser(description=
     "A python tool to create automatically logs into Phoebus-Olog server, " \
-    "triggered by EPICS Process Variable.")
+    "triggered by EPICS Process Variables.")
     parser.add_argument("config", type=str,
     help="The configuration file (TOML format) with required data.")
 

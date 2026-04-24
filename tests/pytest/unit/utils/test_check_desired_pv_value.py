@@ -3,7 +3,7 @@ import pytest
 from epics import caput
 from autolog.utils import check_desired_pv_value
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_check_desired_value_list(simulated_pv):
     """
     Test check_desired_value in autolog/utils
@@ -15,7 +15,7 @@ def test_check_desired_value_list(simulated_pv):
     value = check_desired_pv_value(pv_name, [1, 2, 3])
     assert value is False
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_check_desired_value_int(simulated_pv):
     """
     Test check_desired_value in autolog/utils
@@ -27,7 +27,7 @@ def test_check_desired_value_int(simulated_pv):
     value = check_desired_pv_value(pv_name, 1)
     assert value is False
 
-@pytest.mark.unit
+@pytest.mark.utils
 def test_check_desired_value_float(simulated_pv):
     """
     Test check_desired_value in autolog/utils
@@ -39,8 +39,8 @@ def test_check_desired_value_float(simulated_pv):
     value = check_desired_pv_value(pv_name, 1.2)
     assert value is False
 
-@pytest.mark.unit
-def test_check_desired_value_not_connected():
+@pytest.mark.utils
+def test_check_desired_value_not_connected(simulated_pv):
     """
     Test check_desired_value in autolog/utils
     """

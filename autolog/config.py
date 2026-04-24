@@ -17,6 +17,8 @@ schema = {
         'type': 'dict',
         'schema': {
             'title': {'type': 'string', 'required': True},
+            'tags':  {'type': 'list', 'required': False, 
+                    'schema': {'type': 'string'}},
             'description': {'type': 'string', 'required': True},
             'level': {'type': 'string', 'required': True},
             'logbook': {'type': 'string', 'required': True},
@@ -96,7 +98,7 @@ def read_data(file_path: str, credentials_user_input: bool):
     if credentials_user_input:
         data["credentials"]["username"] = input("Enter username: ")
         data["credentials"]["password"] = input("Enter password: ")
-        data["credentials"]["api_url"] = input ("Enter the HTTP url of the Olog API: ")
+        data["credentials"]["api_url"] = input ("Enter the URL of the Olog API: ")
     v = cerberus.Validator()
     if v.validate(data, schema): #type: ignore
         autolog = data["autolog"]

@@ -9,13 +9,6 @@ import epics
 def is_connected(pv_name: str, timeout: int = 5, enable_log: bool = True) -> bool:
     """
     Check if a PV is connected by by its name.
-
-    :param pv_name: str: the name of the PV to be retrived
-    :param timeout: int: the time to wait without response from any PV before considering that the
-                         search PV is disconnected
-    :param enable_log: bool: `True` if logging is enabled, `False` else
-    :raises exception: exception: thrown if pv_name connection cannot be checked
-    :returns: bool: `True` if the searched PV is connected, `False` else
     """
     if enable_log:
         logging.debug("CAC: checking if `%s` is connected...", {pv_name})
@@ -39,12 +32,6 @@ def is_connected(pv_name: str, timeout: int = 5, enable_log: bool = True) -> boo
 def caget(pv_name: str, as_string: bool = False, enable_log: bool = True) -> object:
     """
     Get a PV by its name.
-
-    :param pv_name: str: the name of the PV to be retrived
-    :param as_string: bool: `True` if the returned value should be a string, `False` else
-    :param enable_log: bool: `True` if logging is enabled, `False` else
-    :raises exception: exception: thrown if pv_name cannot be retrieved
-    :returns: object: the searched PV data
     """
 
     if enable_log:
