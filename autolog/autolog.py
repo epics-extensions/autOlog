@@ -28,7 +28,6 @@ def argparser():
         help="""
     decrease output verbosity. 5 (Critical), 4 (Error), 3 (Warning, default), 2 (Info), 1 (Debug)
     """,  # noqa: E501
-        default=2,
     )
 
     return parser.parse_args()
