@@ -1,4 +1,5 @@
 """Autolog main script"""
+
 import time
 import argparse
 import logging
@@ -7,18 +8,27 @@ from autolog.olog_api.log_content import define_body
 from autolog.config import read_data
 from autolog.utils import define_trigger_action, check_multiple_condition
 
+
 def argparser():
     """
     Argument parser
     """
-    parser = argparse.ArgumentParser(description=
-    "A python tool to create automatically logs into Phoebus-Olog server, " \
-    "triggered by EPICS Process Variables.")
-    parser.add_argument("config", type=str,
-    help="The configuration file (TOML format) with required data.")
+    parser = argparse.ArgumentParser(
+        description="A python tool to create automatically logs into Phoebus-Olog server, "
+        "triggered by EPICS Process Variables."
+    )
+    parser.add_argument(
+        "config",
+        type=str,
+        help="The configuration file (TOML format) with required data.",
+    )
 
-    parser.add_argument("-c", "--credentials", action='store_true',
-    help="Ask user for username, password and api_url")
+    parser.add_argument(
+        "-c",
+        "--credentials",
+        action="store_true",
+        help="Ask user for username, password and api_url",
+    )
 
     parser.add_argument(
         "-v",
@@ -32,37 +42,41 @@ def argparser():
 
     return parser.parse_args()
 
+
 def start_loop(user_data: dict):
     """
     Main thread
     """
-    autolog = user_data['autolog']
-    credentials = user_data['credentials']
-    logging.debug("Autolog data: %s", autolog )
+    autolog = user_data["autolog"]
+    credentials = user_data["credentials"]
+    logging.debug("Autolog data: %s", autolog)
     # Main thread
     while True:
         for index, autolog_instance in enumerate(autolog):
-            autolog_trigger = autolog_instance['trigger']
-            logging.info("Handling Autolog %s of %s",{index + 1}, {len(autolog)} )
-            if autolog_instance.get('condition'):
-                condition = check_multiple_condition(autolog_instance['condition'])
+            autolog_trigger = autolog_instance["trigger"]
+            logging.info("Handling Autolog %s of %s", {index + 1}, {len(autolog)})
+            if autolog_instance.get("condition"):
+                condition = check_multiple_condition(autolog_instance["condition"])
                 if not condition:
                     logging.info("\n")
                     continue
             logging.info("Checking trigger PV... ")
             order = define_trigger_action(autolog_trigger)
             if order:
-                if 'context' in autolog_instance:
-                    context = autolog_instance['context']
+                if "context" in autolog_instance:
+                    context = autolog_instance["context"]
                 else:
                     context = {}
-                autolog_content = define_body(credentials['username'],
-                                              autolog_trigger['trigger_pv_name'],
-                                              user_data['main_log_info'],
-                                              context)
+                autolog_content = define_body(
+                    credentials["username"],
+                    autolog_trigger["trigger_pv_name"],
+                    user_data["main_log_info"],
+                    context,
+                )
                 post_request(autolog_content, credentials)
             logging.info("\n")
-        time.sleep(user_data['main_log_info']['check_time'])
+        time.sleep(user_data["main_log_info"]["check_time"])
+
 
 def main() -> None:
     """
@@ -72,10 +86,11 @@ def main() -> None:
     args = argparser()
 
     arg_debug = logging.WARNING if args.verbosity is None else args.verbosity * 10
-    logging.basicConfig(level=arg_debug, format='%(levelname)s:  %(message)s')
+    logging.basicConfig(level=arg_debug, format="%(levelname)s:  %(message)s")
 
     user_data = read_data(args.config, args.credentials)
     start_loop(user_data)
+
 
 if __name__ == "__main__":
     main()

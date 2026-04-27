@@ -17,30 +17,32 @@ Refer to the [Poetry](https://duckduckgo.com) for instructions.
 
 To build the project, run:
 
-``` bash
+```bash
 poetry install
 ```
 
 To use it:
+
 ```bash
 poetry run python -m autolog.autolog
 ```
 
 Or:
-``` bash
+
+```bash
 poetry shell
 autolog -h
 ```
 
 ### Using Binary
 
-``` bash
+```bash
 poetry run build
 ```
 
 It is using PyInstaller to create a binary in **dist**
 
-``` bash
+```bash
 cd dist
 autolog -h
 ```
@@ -96,9 +98,9 @@ The `example.toml` file provides an example configuration. It includes sections 
 1. [Credentials](#credentials)
 2. [Main Log Information](#main-log-information)
 3. [Autolog Instances](#autolog-instances)
-    - [Trigger](#trigger)
-    - [Condition](#condition)
-    - [Context](#context)
+   - [Trigger](#trigger)
+   - [Condition](#condition)
+   - [Context](#context)
 
 ### Credentials
 
@@ -190,4 +192,3 @@ The `[[autolog.context]]` section is optional, and can be repeated multiple time
 - **`info_pv_name`** (optional): The name of the context PV.
 - **`as_string`** (optional): If set to `'yes'` or `'only'`, the PV value is treated as a string. Default value is `'no'`. Useful for mbbi/mbbo PVs, for example.
 - **`info_pv_desc`** (optional): If set to `true`, includes the description of the PV.
-

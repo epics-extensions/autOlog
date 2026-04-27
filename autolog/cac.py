@@ -3,8 +3,10 @@ Channel Access Client (CAC) interaction functions through pyepics
 
 More details about pyepics here: https://pyepics.github.io/pyepics/
 """
+
 import logging
 import epics
+
 
 def is_connected(pv_name: str, timeout: int = 5, enable_log: bool = True) -> bool:
     """
@@ -29,6 +31,7 @@ def is_connected(pv_name: str, timeout: int = 5, enable_log: bool = True) -> boo
         logging.debug("PV `%s` is connected.", {pv_name})
     return True
 
+
 def caget(pv_name: str, as_string: bool = False, enable_log: bool = True) -> object:
     """
     Get a PV by its name.
@@ -51,7 +54,7 @@ def caget(pv_name: str, as_string: bool = False, enable_log: bool = True) -> obj
     if enable_log:
         if len(str(value)) < 128:
             logging.debug("CAC: got `%s`:", {pv_name})
-            #logging.debug(f"CAC: got `{value}`")
+            # logging.debug(f"CAC: got `{value}`")
         else:
             logging.debug("CAC: got `%s` (value too long to be printed)", {pv_name})
     return value
