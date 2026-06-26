@@ -84,10 +84,16 @@ The result in the web client for autolog instance 2:
 
 ## Tests
 
+### pytest
+
 `poetry run pytest`
 
 Run unit test, for example to test log_content.py:
 `poetry run pytest -m log_content`
+
+### nix tests
+
+`nix flake check`
 
 ## TOML Configuration Keys
 
@@ -155,8 +161,11 @@ The `[[autolog]]` section can be repeated multiple times to define different aut
 ```
 
 - **`trigger_pv_name`** (required): The name of the process variable (PV) that triggers the autolog.
-- **`on_change`** (optional): If set to `true`, the autolog will trigger on any change in the trigger PV. Use either `on_change` or `trigger_pv_value`.
-- **`trigger_pv_value`** (optional): The specific values of the trigger PV that should trigger the autolog. Use either `on_change` or `trigger_pv_value`.
+- **`on_change`** (optional): If set to `true`, the autolog will trigger on any change in the trigger PV.
+- **`trigger_pv_value`** (optional): The specific values of the trigger PV that should trigger the autolog.
+
+> [!NOTE]
+> Use either on_change or trigger_pv_value .
 
 #### Condition
 
