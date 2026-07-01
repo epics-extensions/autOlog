@@ -17,12 +17,10 @@ def is_connected(pv_name: str, timeout: int = 5, enable_log: bool = True) -> boo
     try:
         pv = epics.pv.get_pv(pv_name)
         value = pv.get(as_numpy=False, use_monitor=False, timeout=timeout)
-        # see https://pyepics.github.io/pyepics/pv.html#methods for more details about pv.get(...)
     except Exception as exc:
         if enable_log:
             logging.error("PV `%s` connection cannot be checked!", {pv_name})
         raise exc
-        # handle error
     if value is None:
         if enable_log:
             logging.debug("PV `%s` is not connected.", {pv_name})
@@ -45,16 +43,13 @@ def caget(pv_name: str, as_string: bool = False, enable_log: bool = True) -> obj
             as_string=as_string,
             use_monitor=False,
         )
-        # see https://pyepics.github.io/pyepics/pv.html#methods for more details about pv.get(...)
     except Exception as exc:
         if enable_log:
             logging.error("PV `%s` cannot be retrieved!", {pv_name})
         raise exc
-        # handle error
     if enable_log:
         if len(str(value)) < 128:
             logging.debug("CAC: got `%s`:", {pv_name})
-            # logging.debug(f"CAC: got `{value}`")
         else:
             logging.debug("CAC: got `%s` (value too long to be printed)", {pv_name})
     return value
