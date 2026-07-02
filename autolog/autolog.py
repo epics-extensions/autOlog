@@ -54,13 +54,13 @@ def start_loop(user_data: dict):
     while True:
         for index, autolog_instance in enumerate(autolog):
             autolog_trigger = autolog_instance["trigger"]
-            logging.info("Handling Autolog %s of %s", {index + 1}, {len(autolog)})
+            logging.debug("Handling Autolog %s of %s", {index + 1}, {len(autolog)})
             if autolog_instance.get("condition"):
                 condition = check_multiple_condition(autolog_instance["condition"])
                 if not condition:
                     logging.info("\n")
                     continue
-            logging.info("Checking trigger PV... ")
+            logging.debug("Checking trigger PV... ")
             order = define_trigger_action(autolog_trigger)
             if order:
                 context = {}
@@ -73,7 +73,7 @@ def start_loop(user_data: dict):
                     context,
                 )
                 post_request(autolog_content, attachment_files, credentials)
-            logging.info("\n")
+            logging.debug("\n")
         time.sleep(user_data["main_log_info"]["check_time"])
 
 

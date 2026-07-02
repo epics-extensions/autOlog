@@ -11,7 +11,7 @@ def check_multiple_condition(autolog_condition: dict):
     logical_condition = autolog_condition["logical_condition"]
     several_condition = []
     for index, condition in enumerate(autolog_condition["pv"]):
-        logging.info(
+        logging.debug(
             "  Checking condition %s of %s ...",
             {index + 1},
             {len(autolog_condition["pv"])},
@@ -25,26 +25,26 @@ def check_multiple_condition(autolog_condition: dict):
         several_condition.append(condition)
     if len(autolog_condition["pv"]) == 1:
         if True in several_condition:
-            logging.info("Condition met, waiting to be triggered...")
+            logging.debug("Condition met, waiting to be triggered...")
             return True
-        logging.info("Condition not met")
+        logging.debug("Condition not met")
         return False
     if logical_condition == "and":
         if all(several_condition):
             logging.debug(
                 "The logical operator between condition is: %s", {logical_condition}
             )
-            logging.info("Condition met, waiting to be triggered...")
+            logging.debug("Condition met, waiting to be triggered...")
             return True
     if logical_condition == "or":
         if any(several_condition):
             logging.debug(
                 "The logical operator between condition is: %s", {logical_condition}
             )
-            logging.info("Condition met, waiting to be triggered...")
+            logging.debug("Condition met, waiting to be triggered...")
             return True
     logging.debug("The logical operator between condition is: %s", {logical_condition})
-    logging.info("Condition not met")
+    logging.debug("Condition not met")
     return False
 
 
@@ -96,7 +96,7 @@ def define_trigger_action(autolog_trigger: dict):
             "Update PV Value in trigger dict: %s", autolog_trigger["pv_value"]
         )
         if on_change:
-            logging.info(
+            logging.debug(
                 "Acquisition of the first PV value, "
                 "since log creation is triggered by a change in PV value..."
             )
@@ -113,25 +113,25 @@ def define_trigger_action(autolog_trigger: dict):
 
     if check_desired_pv_value(pv_name, old_value):
         if triggered:
-            logging.info("Log already created once")
+            logging.debug("Log already created once")
         else:
             logging.debug("Same value")
-            logging.info("Trigger condition not met")
+            logging.debug("Trigger condition not met")
         return False
 
     autolog_trigger.update({"triggered": False})
 
     if on_change:
         logging.debug("   - Trigger value: on change")
-        logging.info("Trigger condition met...")
+        logging.debug("Trigger condition met...")
         return True
 
     pv_value = autolog_trigger["trigger_pv_value"]
     logging.debug("   - Trigger value: %s;", pv_value)
     if check_desired_pv_value(pv_name, pv_value):
-        logging.info("Trigger condition met...")
+        logging.debug("Trigger condition met...")
         autolog_trigger.update({"triggered": True})
         return True
-    logging.info("Trigger condition not met")
+    logging.debug("Trigger condition not met")
     autolog_trigger.update({"triggered": False})
     return False
