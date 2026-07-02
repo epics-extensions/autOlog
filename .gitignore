@@ -1,11 +1,9 @@
 venv
 __pycache__/
 Pipfile.lock
-check-epics-gui.spec
 build/
 dist/
 *.spec
 # gitlab-runner: local exec
 builds/
-poetry.lock
 *.log
