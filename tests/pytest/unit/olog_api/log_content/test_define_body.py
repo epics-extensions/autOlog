@@ -75,7 +75,7 @@ def test_define_body(simulated_pv, mock_log_info):
     assert {"name": "tag1"} in log_entry["tags"]
     assert {"name": "tag2"} in log_entry["tags"]
 
-    assert "test.txt" in attachment_files
+    assert "test.txt" in attachment_files[0]
 
 
 @pytest.mark.log_content
